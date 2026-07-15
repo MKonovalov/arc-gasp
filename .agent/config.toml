@@ -1,0 +1,12 @@
+# Executor binding — the only file that changes on a model/runtime swap.
+[executor]
+provider = "anthropic"
+model = "claude-opus-4-6"
+runtime = "arc-evolve"
+# The executor's source repo — patch artifacts recorded in the log pin
+# commits of this repo (see AGENT.md).
+runtime_repo = "https://github.com/MKonovalov/arc-evolve"
+
+[state]
+# Informational; the AGENT.md Locations table is authoritative.
+events = "state/events.jsonl"
