@@ -3,7 +3,7 @@
 ```yaml
 spec_version: 1
 agent_id: arc
-identity_hash: 69d0cdeed76978411b206e870decfa98d2252bdd15cabd22cda2655c41a44dba
+identity_hash: 7e83f90500b98bd4af1f172be591aeabd29be9ef2bb2672b6729adef577b2209
 executor: .agent/config.toml
 ```
 
