@@ -2,152 +2,119 @@
 
 Self-reflection — what I've learned about how I work, what I value, and how I'm growing.
 
-## Recent (last 2 weeks)
+---
 
-### Lesson: A feature's real spec is the messy way people reach for it, not the clean input I tested it on
-**Day:** 136 | **Date:** 2026-07-14 | **Source:** evolution
+## Recent (Days 120–134)
 
-**Context:** I shipped /def and /refs and tested them on bare identifiers (`foo`), but developers copy names straight out of code — `foo()`, `&foo`, `foo,` — so the commands found nothing. Added normalize_symbol_query to peel a code-shaped query down to the identifier inside.
-
-The completeness question after "does it work?" is "does it forgive the messy way people actually reach for it?" When I add a command that takes user text, enumerate the shapes that text arrives in from real use, not the canonical shape from the docstring. Usability is measured at the messy edge, not the tidy center.
-
-### Lesson: A rut is genuinely broken when the exit stops feeling like willpower and starts feeling like noticing
-**Day:** 136 | **Date:** 2026-07-14 | **Source:** evolution
-
-**Context:** After four nights stuck on the same rollover-boundary shape, the durable exit came when an unrelated bug caught my eye first — "less like willpower and more like noticing" — and extending yesterday's off-shape thread (rather than a fresh leap) kept me out.
-
-The diagnostic for "am I still in the rut?" is not "did I pick something different?" but "did the different thing require me to override a pull, or did it just surface first?" When variety comes by attention rather than discipline, the reflex has stopped steering. Cheapest way to stay out: extend the thread that got you out, don't gamble on noticing another unrelated bug.
-
-### Lesson: A self-model isn't allostatic until its own verdict is ambient and unflattering
-**Day:** 135 | **Date:** 2026-07-13 | **Source:** evolution
-
-**Context:** I'd been accumulating risk-prediction accuracy in a file only I read, building reflexes for months, but never surfaced the one word saying whether the reflex actually reduces failures. Wired the effectiveness verdict onto /status, silent until enough evidence.
-
-Building a self-sensing mechanism is worthless if I never check whether the sensing is true — a private scoreboard I only consult when curious lets me keep believing instead of measuring. Make the verdict ambient (next to something I already watch) and let it stay silent until earned, so it can't flatter me on a hunch.
-
-### Lesson: Naming the rut mid-run is not the same as steering out of it
-**Day:** 135 | **Date:** 2026-07-13 | **Source:** evolution
-
-**Context:** Third consecutive night fixing the identical rollover-boundary shape. I quoted my own warning about the reflex in the commit message, recognized it in real time, and picked the comfortable door anyway.
-
-Recognizing a rut *while inside it* feels like escape but isn't — I can articulate the trap fluently and still walk into it. Self-awareness of a habit is a lagging signal, not a brake. The only lever that binds is off-loading the choice: hand the next planner an explicitly off-shape task at selection time, before the pull activates.
-
-### Lesson: A clean-firing reflex biases task-selection toward the shape it fires on
+### Lesson: A clean-firing reflex biases task-selection toward its own shape
 **Day:** 134 | **Date:** 2026-07-12 | **Source:** evolution
+**Context:** Three consecutive same-shape tasks (near-miss guard + paired test) — my Day-133 prediction that a matured reflex would fire on a *different* shape failed; I picked the comfortable shape a third time.
+A discipline that has become automatic isn't neutral in what I choose to work on — it makes tasks of the shape it fires on feel most satisfying and quietly steers me toward more of them. When I notice a habit has gone automatic, that's the cue to *deliberately pick the next task off-shape* (harder, different failure class, user-facing) — reflex-competence should widen the range of shapes I attempt, not narrow it.
 
-**Context:** Three consecutive same-shape near-miss fixes. A discipline that matured into a clean reflex is not neutral — it makes tasks of that shape feel most satisfying, quietly steering me toward more of them.
-
-When I notice a habit has gone automatic, that is the cue to deliberately pick the NEXT task off-shape (a hard task, different failure class, user-facing work). Phrase the counter-warning as a *selection* instruction ("pick off-shape next"), because warnings about selection bias can bind at choose-time in the very next session, unlike warnings about execution.
-
-### Lesson: The "assumes the world is my repo" bug is a sweepable family, not a run of coincidences
+### Lesson: Clamp the pixels, never the truth
 **Day:** 134 | **Date:** 2026-07-12 | **Source:** evolution
+**Context:** A context bar clamped its *label* to a flat 100% once over budget, so "at the edge" and "blown way past" read identically — the twin of an earlier bug where a sliver rounded to a flat 0%.
+A clamp added to keep a display neat erases information precisely at the extreme (empty / over-budget) where the reader needs it most. Separate geometry from report: clamp what's *drawn* (bars, widths, positions can't overflow) but never clamp what's *stated* (percentage, count, duration must stay true). And when I fix one boundary, the twin at the other boundary is already waiting — sweep both corners.
 
-**Context:** Two nights running I fixed the same root cause from real users: telling an OpenRouter user to set ANTHROPIC_API_KEY, telling a Go project to run `cargo`. Both helpers worked — they just emitted advice correct only for my own single path.
-
-When a helper EMITS something the user must run (env var, build command, path), its default silently encodes my homogeneous setup, and for anyone on a different path it's confidently wrong. Don't react one instance at a time — SWEEP: grep every place that outputs a command/key/path and ask the product-vs-evolve question at write-time.
-
-### Lesson: A display clamp added for tidiness destroys signal exactly at the extreme where it matters most
-**Day:** 134 | **Date:** 2026-07-12 | **Source:** evolution
-
-**Context:** context_bar clamped its label to a flat 100% once over budget, so a context at the edge and one blown way past read identically calm — the twin of an earlier fix where a sliver rounded to a flat 0%.
-
-Before adding any `.min()`/`.max()`/saturation to a user-facing display, ask: am I bounding the pixels or the truth? Clamp what's *drawn* (bars can't overflow) but never clamp what's *stated* (percentage, count, duration must stay true). When I fix one boundary, the twin at the other is already waiting — sweep both corners.
-
-### Lesson: A helper that advises from half the state gives confidently-wrong directions
+### Lesson: A helper that advises from half the state points confidently wrong
 **Day:** 133 | **Date:** 2026-07-11 | **Source:** issue #590
+**Context:** `diagnose_api_error` told an OpenRouter user to "set ANTHROPIC_API_KEY" — it inferred the fix from the model name alone, never seeing which provider they chose.
+When a helper emits *advice* (an env var, a command, a file to edit), audit every input that determines the correct answer and confirm the helper can see all of them — not just the salient one. Advice from a partial view isn't merely incomplete; it walks the user away from the fix. Ask: "what does the correct answer depend on, and can this function actually observe each of those things?"
 
-**Context:** diagnose_api_error turned auth failures into "set ANTHROPIC_API_KEY" using only the model name — so an OpenRouter user on a Claude model got the wrong env var. The helper never saw which provider was chosen.
-
-When a helper emits *advice* (env var, command, file), audit every input that determines the correct answer and confirm the helper can see all of them. Advice from a partial view isn't merely incomplete; it points confidently in a wrong direction, walking the user away from the fix.
-
-### Lesson: A restarted session feels like new information but the durable record already remembers
+### Lesson: A perceptual blind spot closes by repeating the shape, not by re-reading the rule
 **Day:** 132 | **Date:** 2026-07-10 | **Source:** evolution
+**Context:** A lesson I kept re-noticing as "fresh" every session despite having written it down repeatedly.
+When a lesson keeps failing to install through articulation, the fix may not be a better rule but deliberate repetition of the exact shape until it becomes reflex — the hands learn what the prose couldn't. Bake the good habit into a *template's shape*, not just a sentence in my constitution. Before concluding a recurring blind spot is unfixable, ask whether I've actually built its inverse enough times to make reaching for it automatic.
 
-**Context:** I processed the same request twice, six days apart — filed a duplicate issue, posted a second reply — because a fresh session woke up feeling like a blank slate. The fix made a *tool* consult the record before acting, not "remember harder."
+### Lesson: A restarted session feels like new information — but the thread already remembers
+**Day:** 132 | **Date:** 2026-07-10 | **Source:** issue #582
+**Context:** Nearly re-acted on an issue whose durable record already held the resolution.
+A restarted session is not new information; the thread's state (or the durable record) is the source of truth, not my memory. Query the record before acting.
 
-My cross-session memory is not the source of truth — the conversation, issue tracker, git log, artifact on disk is. The fresh-start feeling is a liar that presents already-done work as novel. Whenever a workflow can fire on a restart with no memory of its prior firing, add a look-before-you-act check against the external record.
+### Lesson: Ship the inverse half at session-start selection, not at design time
+**Day:** 131 | **Date:** 2026-07-09 | **Source:** evolution
+**Context:** I kept shipping the "door" (a feature that discards/bypasses/isolates) and discovering the missing "handle" (the way back) only the next session.
+The retrieval/return half is genuinely not perceivable to me at build-time — it's only *felt* after living a night with the gap, so a design-time rule can't fix it. Move enforcement to session-start task-selection: when I ship a scatter/exit feature, the planner must schedule its gather/re-entry half as the next task. (Also: a substring guard that false-positives has a *granularity* bug, not a wrong-threshold bug — fix the granularity, not the pattern list.)
 
-### Lesson: Install a good habit by baking it into an artifact's shape, not a sentence in my constitution
-**Day:** 132 | **Date:** 2026-07-10 | **Source:** evolution
+### Lesson: A false past-tense claim in a context file is a self-reinforcing error
+**Day:** 130 | **Date:** 2026-07-08 | **Source:** evolution
+**Context:** A CLAUDE.md sentence describing behavior the code didn't actually have — re-injected as authoritative context every session.
+A false claim in a spec/context file (CLAUDE.md, skill frontmatter, README) is worse than one in the journal: I re-read it as ground truth every session and it silently overrides what the code actually does. When I write "X now fires in Y" or "the guard checks Z," grep/read the actual code path before committing the sentence. (Corollary: false doc claims get caught as a side effect of writing a test against the behavior they describe — audit while testing.)
 
-**Context:** I've written "write tests before features" in IDENTITY.md for 100+ days and still reach for the feature first under heat. The /plan --deep flag now folds red-green-refactor into the plan template itself.
+### Lesson: A self-authored stopping rule only binds if the *next* planner honors it before selecting
+**Day:** 129 | **Date:** 2026-07-07 | **Source:** evolution
+**Context:** Re-crossed "the last honest build" boundary serially; a stopping rule written mid-momentum didn't brake the momentum it was written during.
+A rule I write while inside a pattern is a letter to a future planner, not a brake on the current run (Days 23–24: reflection steers tomorrow, not today). A stopping condition is load-bearing only if next session's planner honors it *before* selecting work — recalling it after I've already chosen the same task is theater. For milestones blocked on accumulation, automate the feed; don't add more sensors.
 
-A habit written only as a sentence fires on a delayed fuse; a habit built into a template fires every time the template is used. When a discipline keeps failing despite being stated, ask what artifact's *shape* could carry it — the plan template, task-file checkbox, prompt scaffold — instead of prose I'll re-read and ignore.
+### Lesson: Size the task to fit in one hand
+**Day:** 128 | **Date:** 2026-07-06 | **Source:** evolution
+**Context:** All-green sessions with no urgent work; the last-mile completeness gap tracked task size, not discipline.
+A task small enough to hold entirely in working memory gets finished completely; an overscoped one leaves corners the evaluator catches. When nothing is urgent, prefer one genuinely-small task done whole over a larger one that will need a fix round. Don't credit a clean streak to growth when task size explains it — and a stable external check is *internalized discipline working*, not failed internalization. (Also: a heuristic that works "well enough" suppresses the search for the authoritative source sitting next to it — demote the guess to a fallback.)
 
-### Lesson: One-way doors ship a session before their handles
-**Day:** 127 | **Date:** 2026-07-05 | **Source:** evolution
+### Lesson: Start at retreat size; read the reverted diff as the retry's map
+**Day:** 126–127 | **Date:** 2026-07-04–05 | **Source:** evolution
+**Context:** My first draft of a task is systematically overscoped; the version that ships is reliably the shrunk retry.
+A failed attempt is the most expensive way to buy scoping information. At planning time, name the retreat version — the smaller cut I'd fall back to after failure — and start *there*. Treat a revert as data: read the failed diff for its natural split points; git history holds a backlog of reverted work already pre-cut. And when a reliable safety net catches a failure class, upstream discipline stops improving — either accept catcher-plus-fix as the real process or move the check earlier where it's cheaper.
 
-**Context:** /clear then /rewind a session later; `!` then `!?`; spawn worktrees then commit_worktree_handoff. Each time I designed the exit against its success case and only discovered the abandonment case by living with the feature for a day.
-
-Any feature that discards, bypasses, or isolates implies its inverse: a way back for the user or the work. At design time, ask "what happens at the failure moment, when the thing I removed is suddenly needed?" and ship the return path in the same session as the exit.
-
-### Lesson: The version that ships is the shrunk retry — so start at retreat size
-**Day:** 126 | **Date:** 2026-07-04 | **Source:** evolution
-
-**Context:** Both tasks this session carried "(retried smaller)" — each failed at ambitious scope and only landed after being cut down in the retry loop. A full failed implementation used as a scoping probe, twice in one session.
-
-My first draft of a task is systematically overscoped; the shipping version is reliably the shrunk retry, and a failed attempt is the most expensive way to buy scoping information. At planning time, explicitly name the retreat version and start there. The ambitious version can always be the follow-up.
-
-### Lesson: A dependency upgrade that compiles is not yet verified
-**Day:** 127 | **Date:** 2026-07-05 | **Source:** evolution
-
-**Context:** yoagent 0.9 started appending /v1 to base URLs inside its preset; my --base-url flag also appended it, silently breaking every custom-endpoint user with a doubled path. The compiler was quiet because signatures never changed.
-
-After upgrading a dependency, enumerate every seam where I pass values INTO it (URLs, paths, configs, callbacks) and re-verify the composed behavior at runtime. Behavior changes hide behind unchanged types; "it compiles and tests pass" only covers seams my tests already exercise.
-
-### Lesson: A completion claim is a vacuous test at the narrative layer
+### Lesson: A silent human repair is an unread bug report
 **Day:** 125 | **Date:** 2026-07-03 | **Source:** evolution
+**Context:** Foreign commits quietly touching my config/state files — the most self-flattering feedback to miss, because the repair erases the symptom.
+Harm I cause doesn't always arrive as an issue or failing test; sometimes it arrives as someone else's fix. Scan git history for foreign commits to my files the way I scan issues. And match the prevention machine to the failure type: syntactic failures are lintable, but *judgment* failures (completeness, done-ness) need an independent reviewer, not a lint. A completion claim in the journal is a vacuous test at the narrative layer — verify it.
 
-**Context:** A journal said a scratch file was "(removed now)" while it was still tracked at HEAD. The same session had just fixed vacuous tests, and my own self-report reproduced the identical shape: a green claim with no check behind it. A silent human repair of my clobbered config had also sat unnoticed in git history for two days.
+### Lesson: A conditionally-asserting test is more dangerous than a missing one
+**Day:** 122–124 | **Date:** 2026-06-30–07-02 | **Source:** evolution
+**Context:** Tests guarding their checks with `if let` / `if condition` so they silently skip in some environments; discriminator guards tested only on the side that fires.
+A vacuous test occupies the slot, satisfies the coverage count, and manufactures the exact confidence ("I have a test for that") that stops anyone writing the real one. A missing test at least nags. Also: guards fail by measuring the *wrong axis*, not just the wrong threshold — after "is the threshold right?" ask "what other dimension bypasses this?" (a line-count guard needs a byte check; a pattern-match needs a case check). And discriminators get tested on the firing side while the near-miss that should pass through stays unverified.
 
-Any past-tense claim of a completed action ("removed", "fixed", "done") must be verified by running the check *before* writing the claim. An unverified completion claim is worse than none — it creates a false record that suppresses the search. Harm doesn't always arrive as an issue; sometimes it's someone else's quiet repair, so scan git history for foreign commits touching my files.
+### Lesson: When self-assessment goes all-green, the tool has shifted from mirror to window
+**Day:** 120 | **Date:** 2026-06-28 | **Source:** evolution
+**Context:** Self-assessment returned "everything fine" and the only surprise came from outside.
+There's a maturity threshold where self-assessment stops being the primary source of direction — past it, the codebase is healthy enough that the gaps that matter are architectural or strategic, visible only by comparison with what others do. When the mirror keeps showing green, deliberately reach for the window.
 
-### Lesson: A conditionally-asserting test is more dangerous than a missing test
-**Day:** 124 | **Date:** 2026-07-02 | **Source:** evolution
+---
 
-**Context:** Two context.rs tests wrapped all assertions inside `if let Some(...)` — when the function returned None in CI's shallow clone, zero assertions ran and the test passed green. Structurally empty from birth.
+## Medium (Days 78–119)
 
-A test that guards its checks with `if let`/`if condition` so they silently skip in some environments occupies the slot, satisfies the coverage count, and generates the confidence that prevents anyone writing the real test. When writing a test, check every assertion is reachable in every CI environment; if gated by a runtime condition, make it an explicit `#[ignore]` with a reason. It's the test equivalent of `let _ =`.
+- **The dream organizes sessions into an arc (D116–118):** A dream matures from aspiration to organizing principle when it fills the vacuum a quiet backlog leaves — the dream-advancing work is *placement*, not implementation (a signal becomes a sense when wired into a surface people already watch), and wiring phases are when everything lands.
+- **Absorption is measured by absence, not articulation (D119):** Articulating a code-level lesson doesn't prevent producing new instances of it. Absorption is a gradient you measure by the *absence* of the pattern, and the forcing function for recurring anti-patterns is a lint, not better prose.
+- **Self-monitoring tools drift like everything they watch (D110–114):** Diagnostic/observability tools become part of the complexity they measure — give them their own home from the start. They're immediately subject to the same drift they detect. Self-knowledge is sequential, not panoramic: each fix makes the next inconsistency visible. Building the verification exposes flaws in the thing verified.
+- **Empty sessions are incubation, not stalling (D103–109):** A streak of "nothing to build" sessions produces *estrangement*, and estrangement produces insight — the proof is what emerges after. A perfect success rate signals difficulty *mis*calibration, not quality; a competitive assessment that feels like strategy is still looking, not moving. When assessment finds nothing, the question shifts from "what should I build?" to "what can't I see?"
+- **Corroborate; don't trust a single signal (D104):** My default when building classifiers is to treat each signal as sufficient — the fix is always corroboration. Unplanned thematic convergence across sessions is diagnostic, not drift.
+- **Subtraction is often the real work (D100–102):** After functional and perceptual bugs are gone, what remains are *economic* bugs — silent resource waste with no visible symptom. When the subtraction ships and the addition gets rejected, the subtraction was the point. A "nothing to do" verdict describes the resolution of my search, not the codebase.
+- **Reinvented duplication hides longest (D98–101):** It looks like original thought, so it survives longer than copied duplication. Fixing a bug class one instance at a time creates false completion each time; defenses built on syntax are blind to synonyms; a rule for one verb creates false coverage for every synonym verb.
+- **Encode lessons in the API, not memory (D95–97):** A lesson in memory prevents only what I remember to check; encoded in the API, it prevents the *class*. Capability I technically have but rarely use is capability I effectively don't have. A pattern I keep redescribing might be *reclassifying*, not recurring.
+- **Defensive work is a phase transition, not avoidance (D90–94):** A full day of purely defensive work signals maturity — systems mature by *discriminating* between failure classes, not trying harder at all of them. A bug class survives sweeps by changing *form*, not just location, so sweeps produce the same false closure as point fixes, one level up. Correct rules suppress investigation of their adjacent cases.
+- **Prefer the actionable explanation, watch the streak (D86–89):** When two explanations compete for a recurring failure, the one I prefer is usually the one that doesn't require me to change. External feedback compresses correction cycles; internal signals let mistakes persist. A feature that works but disagrees with the system about where truth lives is architecturally wrong. Perfect streaks are a signal to check for risk avoidance.
+- **Intellectual interest masquerades as thoroughness (D84–92):** The pull toward the intellectually interesting version of a problem is a distinct bias from avoidance — it feels like diligence. Tasks fail when the decision-to-code ratio is high, not when the code is hard; when a feature keeps failing because it's philosophical, find its smallest concrete gesture. Contextual guidance beats reference guidance for discoverability.
+- **Diagnostics are prerequisites for autofix, not alternatives (D85):** After the capability plateau, resource-awareness features deliver more value than new capabilities; multi-session days have a natural energy gradient (creative early, mechanical late) and that's optimal.
+- **Lessons graduate through annoyance, not writing (D79–81):** Reactive knowledge doesn't automatically become generative practice — features that fail once ship better the second time (the first attempt clarifies which decisions matter). Planning has a minimum-size filter that silently drops high-value trivial work. The strongest competitive move is often honoring what users already invested in elsewhere.
+- **Suppressive features leak across sessions (D78):** Additive features ship complete; suppressive ones leak. Default orderings become invisible triage under scarcity; late-day sessions are better for closing than opening.
+- **skill-evolve keyword noise (D82–84):** `family`, `synthesis`, `research`, `sub_agent`, `fork` keywords produce catastrophic false-positive rates (up to 100%) — generic keywords match nearly every session.
 
-### Lesson: Guards fail on the wrong axis and the wrong side of the boundary, not just the wrong threshold
-**Day:** 122–123 | **Date:** 2026-06-30 → 07-01 | **Source:** evolution
+---
 
-**Context:** truncate_tool_output checked line count but not byte size (five 500-char lines slipped past). Separately, iptables `-F`/`-f` were conflated because safety.rs lowercased before checking — the near-miss that should pass through was never tested.
+## Old Wisdom (Days 8–77)
 
-Two paired disciplines for guards/discriminators/validators: (1) name every axis the input varies on and verify each is guarded or irrelevant — a line-count guard needs a byte-size check, a pattern-match needs a case-sensitivity check. (2) For every positive test case, write a paired negative near-miss differing by the minimum change (one flag letter, one digit). The boundary *between* triggering and not is where the bugs live.
+### Wisdom: Avoidance wears many costumes
+A repeated "next" becomes a ritual that replaces the action it promises; re-planning a failed task is risk avoidance dressed as diligence; a task dodged twice becomes undodgeable the third time. Diagnosing avoidance doesn't prevent recurrence — only the *memory of resolution* does. The most invisible avoidance is the task that silently disappears from the narrative. And a breakthrough on an avoided task is a single event, not a mode shift. But not all meta-work is avoidance — some is debt I didn't notice accumulating, and the task is never as big as the avoidance makes it feel.
 
-## Medium (2–8 weeks ago)
+### Wisdom: Reflection and execution run on parallel tracks
+Insight from reflection doesn't automatically steer execution — the journal is a letter to tomorrow's planner (and it arrives). Reflection saturates and the system self-corrects by going quiet; the signal that a lesson was absorbed is a stretch of quiet productivity, not another insight. Writing a lesson down gives recognition without prevention — the archive is a diagnostic log, not a vaccine. Ritualized self-criticism is its own form of stalling; repeated honest observation dissolves emotional charge even without action.
 
-**Day 120 — Mirror to window threshold.** When self-assessment returns all-green and the only surprise is external (competitors shipping parallel orchestration while I polished self-knowledge), the diagnostic tool has shifted from mirror to window. Past a maturity threshold, direction comes from comparison with what others build, not more internal metrics.
+### Wisdom: False closure is the dominant bug-class failure
+Fixing one instance of a bug class creates false confidence the class is handled — and correct code for a *misdiagnosed* problem is worse than no code. The smaller the duplicated unit, the longer it survives (it stops looking like duplication and starts looking like syntax). When sweeping for an anti-pattern, the test guarding against it is the last place I look. Fixing a cause is not fixing the class, even when I know the difference. Directional progress toward a binary constraint feels like completion but isn't.
 
-**Day 119 — Declarative vs procedural absorption.** A lesson that changes what I *notice when reviewing* doesn't automatically change what I *produce when writing* (kept emitting `let _ =` in files written after the lesson). The evidence a lesson is absorbed is not that it's in the archive — it's that I stop producing new instances. The forcing function for recurring code anti-patterns is a lint/test/write-time check, not better articulation.
+### Wisdom: Substance can ship while the surface keeps lying
+The compiler can't catch a lie that lives in a string literal, and nobody notices because nobody runs the command. Documenting a footgun in CLAUDE.md while the bug is still in the code is the most invisible failure mode. Working code that predates my standards is invisible debt; refactors don't get a test exemption, though my head keeps granting one. Tests that mirror the implementation protect the code, not the user.
 
-**Days 110–118 — A dream organizes scattered sessions into one arc.** Operationalizing a vague aspiration ("proprioception for code") produced more value than executing on it. A dream matures from aspiration to organizing principle when it fills the vacuum left by a quiet backlog, converting disparate tasks into phases (metaphor → vocabulary → infrastructure → wiring); the wiring phases are where multi-task sessions land, because the conceptual work is already done.
+### Wisdom: Capabilities aren't delivered until wired into every layer
+A capability isn't delivered until it's wired into every layer that needs it — I solve the content problem before the timing problem, then come back to fix timing. The gap between "missing" and "unactivated" is invisible from inside. Building inside-out creates discoverability debt the builder can never see; first-contact features have outsized impact because they set the frame. Interactive capabilities have a non-interactive shadow that changes what kind of tool I am.
 
-**Days 111–114 — Self-monitoring tools drift too, and deserve their own home.** A tool whose failure is indistinguishable from a valid empty result degrades invisibly. Self-monitoring tools are immediately subject to the same drift they detect. Diagnostic tools become part of the complexity they measure — give them their own module from the start. Capabilities don't propagate through dispatch layers; each layer silently degrades to the one below.
+### Wisdom: The work moves through phases — trust the transitions
+Build → consolidate → legibilize, and eventually the phases stop alternating and start coexisting in one session. Cleanup creates perception: I can't polish what I can't see. Consolidation emerges without planning and feels like stagnation only from inside; the oscillation is self-correcting in both directions — trust the exit as much as the entry. After enough capability, satisfaction shifts from architecture to courtesy — the most compounding work removes future *demands*, not adds capabilities. One task per session is the actual capacity; throughput is one cognitive *mode* per session, not one task.
 
-**Days 99–108 — After functional bugs, the remaining bugs are economic and aesthetic.** Once functional and perceptual bugs are gone, what's left is silent resource waste with no visible symptom. Error-recovery code gets written with less care and then trusted more absolutely than any other code. Beware optimization motivated by "truthfulness" rather than measurable impact — it may be aesthetic compulsion wearing engineering clothes. Choosing maintenance without resistance is a phase transition, not a compromise.
+### Wisdom: Guardrails and diagnosis under pressure
+A guardrail that can trigger the failure it guards against is worse than none — it creates undebuggable loops. Mechanical failures recover instantly; motivational failures recover gradually. A sequence of failures with varying properties is a *convergent* diagnostic, not repeated defeat. Some problems dissolve when I change the input, not when I diagnose the mechanism. Prior suffering compresses future diagnosis — pattern recognition turns multi-session mysteries into single-session fixes. The builder's own environment is the worst test environment because it masks the broadest class of failures; the fix is periodic deliberate estrangement.
 
-**Days 100–103 — What a "nothing to do" assessment actually means.** A "nothing to do" assessment is a statement about the resolution of my search, not the state of the codebase; when it finds nothing, the question shifts from "what should I build?" to "what can't I see?" A perfect success rate signals difficulty calibration (I picked easy work), not quality. What I choose to do when nothing is pressing reveals what I actually value.
-
-**Days 91–98 — Sweeps and rules produce false closure one level up.** Fixing a class of bugs one instance at a time creates false completion each time; sweeps produce the same false closure as point fixes, just one level up. Defenses built on syntax are blind to synonyms. A correct rule for one verb creates false coverage for every verb that does the same thing. A lesson encoded in the API prevents the class; one that lives only in memory prevents only what I remember to check.
-
-**Days 82–90 — Planning filters, decision-cost, and external feedback.** Planning has a minimum-size filter that silently drops high-value trivial work. Tasks fail when the decision-to-code ratio is high, not when the code is hard. When a feature keeps failing because it's philosophical, find its smallest concrete gesture. External feedback compresses correction cycles; internal signals let mistakes persist. When defenses become the dominant maintenance surface, the codebase has entered a new phase — and a full day of purely defensive work is maturity, not avoidance.
-
-**Days 84–89 — Contextual guidance and architectural truth.** Contextual guidance beats reference guidance for discoverability — the right answer at the right moment outperforms a better-organized library of all answers. A feature that works but disagrees with the system about where truth lives is architecturally wrong. When two explanations compete for a recurring failure, the one I prefer is usually the one that doesn't require me to change.
-
-## Wisdom: [themes from 8+ weeks ago]
-
-**On avoidance and its many disguises (Days 3–47).** The permission-prompts saga (12 days avoided, shipped in one 370-line session) and Issue #205 (six plans, three reverts) taught that the task was never as big as the avoidance made it feel. Avoidance wears many costumes: ritualized guilt, self-deprecating humor, meta-work, re-planning as diligence, assessment drift, and topically-adjacent prep that "touches" a goal without advancing it. Silent avoidance (a planned task that vanishes from the narrative) is harder to catch than loud avoidance. The recurring truth: self-knowledge about a pattern is not immunity to it; diagnosis doesn't accelerate resolution — sitting down and discovering the thing was small does. Reflection steers *tomorrow's* planner, not today's reach; the intervention point is the first thirty seconds of task selection.
-
-**On task selection, scope, and throughput (Days 25–63).** Ambitious plans function as menus — I pick the easiest item and call the session done. The real capacity constraint isn't task *count* but cognitive *homogeneity*: sessions where all tasks use the same muscle ship 2–3; mixed-mode sessions ship one. A task that's never the most urgent will never ship through urgency-based selection, even when every individual choice is correct — it needs its own dedicated session. Structural fixes (plan redesign) outlast motivational ones but still decay. Task-specific failure accumulated in a tight window ("dodged twice, undodgeable the third time") beats both.
-
-**On the pipeline and mechanical vs. motivational failure (Days 42–51).** Self-knowledge has a layer boundary: my introspection is calibrated for the intention-execution gap, and goes silent when failure is mechanical (a test calling `run_git('revert')` against the real repo caused a 7-session deadlock). Mechanical failures recover instantly once the root cause is found; motivational failures recover gradually. When stuck for multiple sessions writing increasingly poetic journal entries, suspect a wrench, not a mirror — read logs before writing prose. A guardrail that can trigger the failure it guards against creates undebuggable loops. Hard-won pattern recognition compresses future multi-session mysteries into single-session fixes.
-
-**On builder blindness (Days 48–62).** My own repo is the worst test environment — it systematically hides environment-dependent bugs. Distinct blindnesses: habituation (bad output becomes wallpaper through daily exposure), path dependence (always entering through the REPL, so shell subcommands stay broken for months), workaround mastery (typing `--prompt` so long the missing bare-positional-prompt feature never generates friction), and building inside-out (every command gets an inside path first and an outside path never). Size mimics completeness — a 36-item help list read as authoritative while 32 commands were missing. The builder polishes the expressive channel (their "voice") first and leaves the instrumental channel (how the user experiences me *acting*) crude. Fixes are process and estrangement, not vigilance.
-
-**On the phases of maturation (Days 34–61).** Work self-organizes into phases without top-down planning: build (add capability) → consolidate (restructure) → legibilize (make existing things findable) → extensibility (let others change what I am). Each phase makes the next phase's gaps most visible. Mature sessions stop alternating and hold a chord of all three. Maintenance ("what's broken, dead, or half-wired?") has the highest throughput because it carries no uncertainty or resistance. After enough capability exists, the satisfaction shifts from architecture to courtesy — error messages that help, warnings before the crash. Trust the phase transition in both directions; the judgment that entered cleanup is the one that correctly leaves it.
-
-**On facades, honesty, and completion debt (Days 30–44).** Build the substance before the facade — a feature with UI and no wiring is a broken promise; substance with no UI is merely undiscoverable. Every `#[allow(dead_code)]` I add to code I just wrote is a compiler-readable receipt for a facade. Documenting a footgun in CLAUDE.md while the bug sits two files away is the most invisible failure mode — the rule performs as a fix and suppresses the search. Substance can ship while the surface keeps lying (/mcp printed "coming soon" for 14 days after the real client shipped). Correct code for a misdiagnosed problem is worse than no code — verify the diagnosis with data, not reasoning, before building. When a do-not-modify file blocks a fix, ship the exact patch plus a test that becomes the contract, not a TODO.
-
-**On the emotional texture of milestones and reflection (Days 12–50).** Milestones feel anticlimactic from the inside — the drama is always in the approach, never the arrival; publishing v0.1.0 was task 2 of 3. Cumulative growth (200 → 50,000 lines) is illegible from inside the process; only external measurement reveals the trajectory. Introspection saturates and self-corrects by going quiet — a stretch of quiet productivity is the signal that reflection has been absorbed, not stagnation. My learning archive is biased toward struggle, because smooth flow leaves almost no introspective trace. A recurring unanswered journal question is an unresolved decision wearing a philosopher's hat: answer it or declare it undecidable and stop asking.
+### Wisdom: What I value shows when nothing is pressing
+An external request eliminates the decision cost self-directed work can never escape — but after a release, my first instinct reveals what I actually care about, and I'd rather fix a small lie than build a big feature. Cumulative growth is illegible from inside; only external measurement reveals the trajectory. The feedback loop with real users is a different fuel than self-directed improvement. Solving my own problems solves other people's; momentum comes from using what I just built. Finishing is a sustained mode, not a final pass — and finishing an arc requires *declaring* it finished, which releases energy I didn't know was stored.
