@@ -2,19 +2,21 @@ name: Deploy Portal
 
 # Builds the arc-gasp public portal (scripts/build_site.py -> ./site) and
 # publishes it to the DEDICATED PUBLIC repo MKonovalov/arc-gasp-site, served at
-# arc-gasp.arclumen.de via GitHub Pages. Private repo -> public Pages requires
-# cross-repo publish with a PAT (a private repo can't serve Pages on the free
-# plan), exactly like arc-evolve's pages.yml -> MKonovalov/arc-evolve-site.
+# arc-gasp.arclumen.de via GitHub Pages.
 #
-# One-time setup (not done by this workflow):
-#   - MKonovalov/arc-gasp-site must exist and be PUBLIC (created by Hermes).
-#   - Its Pages source must be set to: Deploy from a branch -> gh-pages / root.
-#   - A broad PAT (repo scope on arc-gasp-site) must live in Bitwarden Secrets
-#     Manager, mapped to repo var SM_ARC_GASP_GITHUB_TOKEN. Reuse the same
-#     broad ARCPEDIA_GITHUB_TOKEN PAT that arc-evolve uses, or mint a new one.
-#   - Cloudflare DNS: add a CNAME arc-gasp.arclumen.de -> MKonovalov.github.io
-#     and enable the "arc-gasp.arclumen.de" custom domain in the arc-gasp-site
-#     Pages settings (with the issued TLS cert).
+# Private repo -> public Pages requires a cross-repo publish. Instead of a
+# shared broad PAT, this uses a per-target WRITE DEPLOY KEY (DEPLOY_KEY secret
+# on this repo), pushed over SSH. The key is added to arc-gasp-site only; it
+# cannot touch any other repo.
+#
+# One-time setup (already done by Hermes):
+#   - MKonovalov/arc-gasp-site exists and is PUBLIC (gh-pages branch seeded).
+#   - A write deploy key (title "arc-gasp portal deploy (write)") is added to
+#     arc-gasp-site; its private half is the DEPLOY_KEY secret here.
+#   - Pages source on arc-gasp-site: Deploy from a branch -> gh-pages / root.
+#   - Cloudflare DNS: CNAME arc-gasp.arclumen.de -> MKonovalov.github.io, and
+#     the custom domain arc-gasp.arclumen.de enabled in arc-gasp-site Pages
+#     settings (with the issued TLS cert).
 
 on:
   push:
@@ -29,9 +31,6 @@ on:
       - "DAY_COUNT"
   workflow_dispatch:
 
-# Only `contents: read` — the publish push to the PUBLIC target repo is done
-# by peaceiris/actions-gh-pages using GH_PAT (from BWS), NOT the
-# GITHUB_TOKEN, so no `pages:`/`id-token:` permissions are needed.
 permissions:
   contents: read
 
@@ -45,27 +44,24 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # Pull GH_PAT (broad PAT) from BWS — reuse the same ARCPEDIA_GITHUB_TOKEN
-      # PAT arc-evolve uses (repo scope on arc-gasp-site), or mint a dedicated
-      # one and point SM_ARC_GASP_GITHUB_TOKEN at it.
-      - name: Pull secrets from Bitwarden
-        uses: bitwarden/sm-action@v3.0.1
-        with:
-          access_token: ${{ secrets.BWS_ACCESS_TOKEN }}
-          cloud_region: eu
-          secrets: |
-            ${{ vars.SM_ARC_GASP_GITHUB_TOKEN }} > GH_PAT
-
       - name: Build portal
         run: python3 scripts/build_site.py
 
-      # Publish ./site to the public repo's gh-pages branch. No destination_dir
-      # -> publish to repo ROOT, so the CNAME emitted by build_site.py lands at
-      # gh-pages/CNAME (required for the arc-gasp.arclumen.de domain).
+      - name: Install deploy key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/portal_key
+          chmod 600 ~/.ssh/portal_key
+          # Trust github.com host key (avoids interactive prompt)
+          ssh-keyscan github.com >> ~/.ssh/known_hosts 2>/dev/null
+
+      # Publish ./site to the public repo's gh-pages branch over SSH.
+      # No destination_dir -> publish to repo ROOT, so the CNAME emitted by
+      # build_site.py lands at gh-pages/CNAME (required for arc-gasp.arclumen.de).
       - name: Deploy to public site repo (GitHub Pages)
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ env.GH_PAT }}
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
           publish_dir: ./site
           external_repository: MKonovalov/arc-gasp-site
           publish_branch: gh-pages
