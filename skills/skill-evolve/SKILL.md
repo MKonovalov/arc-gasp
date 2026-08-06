@@ -26,7 +26,7 @@ Three categories of skill exist:
 
 | `origin:` value | Source | You may edit? |
 |---|---|---|
-| `creator` | Written by the human creator (MKonovalov or a fork creator) | **Never** |
+| `creator` | Written by the human creator (Yuanhao or a fork creator) | **Never** |
 | `arc` | Written by arc (this skill, or in past evolutions like `social`/`family`/`release`) | Yes — eligible |
 | `marketplace`, `gh:user/repo`, etc. | Installed from a third party | **Never** — upstream owns it |
 | (missing) | Unknown provenance | **Never** (default-safe) |
@@ -100,7 +100,7 @@ cycle_index=$(grep -E '^## .*evt-[0-9]+ (refine|create|retire|meta-suggestion)' 
 
 ## Lifecycle states
 
-Every eligible skill carries a `status:` field in its frontmatter. Five states. **Important**: yoagent always loads anything with a valid `<dir>/SKILL.md` regardless of status — `status:` is *your* bookkeeping, telling you what to do next, not what the loader does. The only way to fully un-load a skill from the agent's prompt is to `git mv` its directory to `skills_attic/` (sibling of `skills/`, not scanned by `--skills`).
+Every eligible skill carries a `status:` field in its frontmatter. Five states. **Important**: arcagent always loads anything with a valid `<dir>/SKILL.md` regardless of status — `status:` is *your* bookkeeping, telling you what to do next, not what the loader does. The only way to fully un-load a skill from the agent's prompt is to `git mv` its directory to `skills_attic/` (sibling of `skills/`, not scanned by `--skills`).
 
 | State | `status:` value | Description-prefix | Entry condition | Exit condition |
 |---|---|---|---|---|

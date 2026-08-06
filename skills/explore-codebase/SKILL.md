@@ -50,7 +50,7 @@ Define the exploration scope — be specific:
 
 - A directory: `src/format/`
 - A file glob: `src/agent_builder.rs src/main.rs src/tools.rs`
-- A dependency: `~/.cargo/registry/src/*/yoagent-*/src/`
+- A dependency: `~/.cargo/registry/src/*/arcagent-*/src/`
 - A commit range: `git diff main..feature-branch --name-only`
 
 If the scope is vague ("understand this project"), start with orientation (Step 2). If the scope is precise (a named set of files), skip to Step 3.
@@ -95,7 +95,7 @@ Store each file's content in shared state, then dispatch a sub-agent to summariz
 shared_state set key="explore.<region>.<filename>" value="<file contents>"
 ```
 
-Namespace convention: `explore.<region>.<filename>` (e.g., `explore.format.markdown`, `explore.yoagent.agent`).
+Namespace convention: `explore.<region>.<filename>` (e.g., `explore.format.markdown`, `explore.arcagent.agent`).
 
 If a single file exceeds 30KB (~120,000 bytes), chunk it before storing:
 - Split into chunks of ~80KB with 8KB overlap between consecutive chunks

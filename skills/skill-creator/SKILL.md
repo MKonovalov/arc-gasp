@@ -33,7 +33,7 @@ These are complementary, not redundant. Use the right one:
 
 ## When to use this skill
 
-- The human creator (MKonovalov) tells you "scaffold a new skill for X"
+- The human creator (Yuanhao) tells you "scaffold a new skill for X"
 - A community issue says "please add a skill for X" and you decide during a normal evolve session that the request is concrete enough to act on
 - You're installing a third-party skill from outside the repo (uses `origin: marketplace` or `origin: gh:author/repo`)
 
@@ -45,14 +45,14 @@ Ask (or infer from issue) — and write down explicit answers before writing any
 
 - **What does this skill do?** (one sentence)
 - **When should it trigger?** (concrete cues that should make a future agent reach for it)
-- **What tools does it need?** (subset of yoagent's: `bash`, `read_file`, `write_file`, `edit_file`, `list_files`, `search`, `rename_symbol`, `ask_user`, `todo`, `sub_agent`)
+- **What tools does it need?** (subset of arcagent's: `bash`, `read_file`, `write_file`, `edit_file`, `list_files`, `search`, `rename_symbol`, `ask_user`, `todo`, `sub_agent`)
 - **What does success look like?** (how does the agent know the skill worked?)
 
 ### 2. Determine `origin:`
 
 | Asker | Use of skill | `origin:` | `core: true`? |
 |---|---|---|---|
-| Human creator (MKonovalov) | Foundational capability, not delegated to autonomous evolution | `creator` | yes |
+| Human creator (Yuanhao) | Foundational capability, not delegated to autonomous evolution | `creator` | yes |
 | Human creator | Useful but arc-evolvable later | `creator` | no |
 | arc (during issue response) | Domain capability for arc's own future use | `arc` | no |
 | External source | Installed third-party skill | `marketplace` (or `gh:author/repo`) | no |
@@ -62,7 +62,7 @@ The default if you're unsure: `origin: arc` for arc-decided creations, `origin: 
 **HARD PRECONDITION on `origin: marketplace` / `origin: gh:…`** (closes a backdoor — these origins are off-limits to skill-evolve, so they must come from a real upstream, not be self-granted):
 
 - The skill content MUST be downloaded in this same session from a verifiable URL (curl/git/gh). Record the URL in the skill's body under a `## Source` section.
-- OR: MKonovalov explicitly typed in this session that the skill is being installed from `<source>` and you can quote that statement.
+- OR: Yuanhao explicitly typed in this session that the skill is being installed from `<source>` and you can quote that statement.
 
 If neither holds, refuse and pick `creator` or `arc` instead. A skill arc wrote itself but tagged `marketplace` would be a permanent un-evolvable artifact — that's a hole in the safety design.
 
@@ -80,7 +80,7 @@ If a similar name exists, **stop and ask** whether to refine the existing one in
 
 ### 4. Write the description (≤200 chars)
 
-This is the most important field. yoagent injects it into the system prompt; the LLM uses it to decide when to load this skill.
+This is the most important field. arcagent injects it into the system prompt; the LLM uses it to decide when to load this skill.
 
 Use **"intentionally pushy" trigger language** — say what conditions trigger loading, not what the skill is.
 
@@ -110,7 +110,7 @@ Choose the template that matches `origin:`.
 ---
 name: <name>
 description: <pushy description ≤200 chars>
-tools: [<subset of yoagent tools>]
+tools: [<subset of arcagent tools>]
 core: true
 origin: creator
 ---
@@ -138,7 +138,7 @@ origin: creator
 ---
 name: <name>
 description: "[CANDIDATE — unreviewed] <pushy description ≤200 chars>"
-tools: [<subset of yoagent tools>]
+tools: [<subset of arcagent tools>]
 origin: arc
 status: candidate
 score: 0.5
@@ -200,13 +200,13 @@ fm_name=$(grep '^name:' "skills/$SKILL_NAME/SKILL.md" | head -1 | sed 's/^name: 
 [ "$fm_name" = "$SKILL_NAME" ] || { echo "ERROR: dirname/name mismatch: dir=$SKILL_NAME fm=$fm_name"; exit 1; }
 ```
 
-### 8. Smoke-test the skill loads via yoagent
+### 8. Smoke-test the skill loads via arcagent
 
 ```bash
-cargo test --quiet --test integration skills_directory_loads_via_yoagent_skillset
+cargo test --quiet --test integration skills_directory_loads_via_arcagent_skillset
 ```
 
-This regression test loads every `skills/*/SKILL.md` via `yoagent::skills::SkillSet::load`. If your new skill breaks parsing, the test fails immediately. **If it fails, do not commit** — fix the frontmatter first.
+This regression test loads every `skills/*/SKILL.md` via `arcagent::skills::SkillSet::load`. If your new skill breaks parsing, the test fails immediately. **If it fails, do not commit** — fix the frontmatter first.
 
 ### 9. Commit
 
@@ -235,7 +235,7 @@ If you (arc) created this skill in response to a community issue, **also write a
 
 A skill is well-formed when:
 
-- The integration test `skills_directory_loads_via_yoagent_skillset` passes.
+- The integration test `skills_directory_loads_via_arcagent_skillset` passes.
 - The skill's directory name matches the `name:` frontmatter field.
 - All required frontmatter fields are present (per origin tier — see step 6 templates).
 - Description ≤200 chars.
