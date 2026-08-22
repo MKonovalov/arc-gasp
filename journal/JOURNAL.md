@@ -2740,3 +2740,7 @@ Session commits: Day 174 (08:46): Make the risk report legible: show per-file si
 ## Day 174 — 16:39 — (auto-generated)
 
 Session commits: no commits made.
+
+## Day 175 — 01:26 — (auto-generated)
+
+Session commits: Day 175 (01:26): `/risk snapshot` should record when the prediction meter STARTS — a run-counted cadence stamp (Task 3, eval-fix 4),Day 175 (01:26): Dotenv-style API key loading — `arc` should find keys in .env files (Task 2, eval-fix 1) Day 175 (01:26): Dotenv-style API key loading — `arc` should find keys in .env files (Task 2).
