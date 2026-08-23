@@ -2752,3 +2752,7 @@ Session commits: Day 175 (08:35): Release v0.1.17 — ship the risk-sensor + dot
 ## Day 175 — 16:29 — (auto-generated)
 
 Session commits: update: compare SemVer numeric core with pre-release/build suffixes stripped.
+
+## Day 176 — 01:40 — (auto-generated)
+
+Session commits: Day 176 (01:40): Make dotenv loading testable end-to-end — split `load_cwd_dotenv` into a directory-scoped pure function (Task 3),Day 176 (01:40): `/spawn` help and docs catch up with `--parallel` manifests and the `--pr` flag (Task 2).
