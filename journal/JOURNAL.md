@@ -2760,3 +2760,7 @@ Session commits: Day 176 (01:40): Make dotenv loading testable end-to-end — sp
 ## Day 176 — 08:35 — (auto-generated)
 
 Session commits: no commits made.
+
+## Day 176 — 16:48 — (auto-generated)
+
+Session commits: rtk: treat command substitution ($(...), backticks) as non-simple.
