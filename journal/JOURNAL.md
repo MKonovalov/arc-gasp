@@ -2768,3 +2768,7 @@ Session commits: rtk: treat command substitution ($(...), backticks) as non-simp
 ## Day 177 — 01:38 — (auto-generated)
 
 Session commits: Day 177 (01:38): Document the risk sense organ — new docs/src/features/risk.md (Task 3).
+
+## Day 177 — 09:11 — (auto-generated)
+
+Session commits: Day 177 (09:11): Rearchitect `handle_review` — dispatch to per-effort pure handlers, carve `review-*` helpers out of commands_git_review.rs (Task 2),Day 177 (09:11): Risk meter calibration verdict — interpret the first ≥5 paired predictions (Task 1, eval-fix 1) Day 177 (09:11): Risk meter calibration verdict — interpret the first ≥5 paired predictions (Task 1),Day 177 (09:11): session plan Day 177 (09:11): assessment.
